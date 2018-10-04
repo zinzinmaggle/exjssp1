@@ -12,7 +12,7 @@ app.set('view engine', 'handlebars');
 app.io = io.listen(app.listen(3002));
 
 var client  = mqtt.connect('mqtt://127.0.0.1:1883')
-client.subscribe('topic');
+client.subscribe('dht11');
 
 client.on('message', function (topic, message) {
     test(message);
