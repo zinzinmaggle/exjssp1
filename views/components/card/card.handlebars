@@ -1,14 +1,20 @@
+<script>  
+    var socket = io.connect('http://localhost:3002');
+    socket.on('messages', function(data) {
+        $("#message").html(data);
+    });
+</script>
 <div>   
-    <div class="uk-card uk-card-default uk-card-body uk-width-auto@m">
+    <div class="uk-card uk-card-small uk-card-default uk-card-body uk-width-auto@m">
         <div class="uk-card-badge uk-label">Hors-ligne</div>
-        <h3 class="uk-card-title">{{libelle}}</h3>
+        <h3 class="uk-card-title">{{libelleObjet}}</h3>
         <div >
-                <p id="message">Identifiant de connexion : {{mqttId}}</p>
-        <ul uk-tab>
-                <li class="uk-active"><a href="">Temperature</a></li>
-                <li><a href="">Humidité</a></li>
-                <li class="uk"><a>Temperature ressentie</a></li>
-        </ul>     
+            <p id="message">{{typeObjetLabel}} <br/> Identifiant de connexion : {{identifiantConnexion}}</p>
+            <ul uk-tab>
+                {{#each datas}}
+                    <li class="uk"><a class="uk-tab-root-link" href="">{{libelle}}</a></li>
+                {{/each}}
+            </ul>     
             <p class="uk-text-success">17°C</p>
         </div>
     </div> 

@@ -1,9 +1,3 @@
-  <script>  
-    var socket = io.connect('http://localhost:3002');
-    socket.on('messages', function(data) {
-        $("#message").html(data);
-    });
-</script>
 <div id="vertical-center-align">
     <div class="uk-grid-small uk-child-width-1-4@s uk-flex-center uk-text-center" uk-grid>
          {{#each Objets}}

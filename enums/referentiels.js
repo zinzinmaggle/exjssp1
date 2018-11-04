@@ -1,4 +1,4 @@
-const _referentiels = {
+const Referentiels = {
     SONDES:{
         libelle: "Sondes",
         code:"SON-",
@@ -6,9 +6,15 @@ const _referentiels = {
         dataStructure: {t:'',h:'',tr:''},
         actions: {},
         commandStructure: {},
+    },
+    ARROSEURS:{
+        libelle: "Arroseurs",
+        code:"ARR-",
+        typeObjetCd: "ARR",
+        dataStructure: {t:'',h:'',tr:''},
+        actions: {},
+        commandStructure: {},
     }
 }
 
-module.exports = {
-    Referentiels: _referentiels
-}
+module.exports = Referentiels;
