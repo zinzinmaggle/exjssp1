@@ -1,7 +1,10 @@
 import { app } from '../../server.js'
+import { RootController } from '../../controllers/root/index.js'
 
 app.get('/', function (req, res) {
-    res.render('root/root');
+    RootController.render(res);
 });
 
-
+app.post('/ajouter', function (req, res) {
+    RootController.ajouterAction(res,req)
+});

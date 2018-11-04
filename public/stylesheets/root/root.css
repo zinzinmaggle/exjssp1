@@ -1,12 +1,16 @@
 #vertical-center-align{
-    width: 100%;
-    height: 15%;
-
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+}
+#vertical-center-align > :first-child{
+    width:100%;
+}
+#root_new_object{
+    position: fixed;
+    bottom: 10vh;
+    right:20vh;
 }
