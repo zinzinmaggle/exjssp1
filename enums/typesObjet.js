@@ -6,19 +6,25 @@ const TypesObjet = {
             {
                 unity : "°C",
                 icon: "",
-                libelle : "Température"
+                libelle : "Température",
+                abreviation : "t"
             },
             {
                 unity : "%",
                 icon: "",
-                libelle : "Hygrométrie"
+                libelle : "Hygrométrie",
+                abreviation : "h"
             },
             {
                 unity : "°C",
                 icon: "",
-                libelle : "Température ressentie"
+                libelle : "Température ressentie",
+                abreviation : "tr"
             }
-        ]
+        ],
+        dataStructure: {t:'',h:'',tr:''},
+        actions: {},
+        commandStructure: {}
     }
 }
 module.exports = TypesObjet;

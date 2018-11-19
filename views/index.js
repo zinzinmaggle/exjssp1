@@ -1,1 +1,0 @@
-Handlebars.registerPartial('popin', '{{name}}')

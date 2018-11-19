@@ -13,10 +13,10 @@
                 </div>
 
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="form-horizontal-select">Referentiel</label>
+                    <label class="uk-form-label" for="form-horizontal-select">Type d'objet</label>
                     <div class="uk-form-controls">
-                        <select class="uk-select" name="referentielCd" id="form-horizontal-select">
-                            {{#each Referentiels}}
+                        <select class="uk-select" name="typeObjetCd" id="form-horizontal-select">
+                            {{#each TypesObjet}}
                              <option value="{{code}}">{{libelle}}</option>
                              {{/each}}
                         </select>
@@ -35,8 +35,5 @@
                  </div>
             </form>
         </div>
-        
-       
-
     </div>
 </div>

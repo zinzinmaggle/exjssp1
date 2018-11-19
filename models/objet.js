@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var ObjetSchema = new Schema(
   {
-    referentielCd: {type: String, required: true, max: 100},
+    typeObjetCd: {type: String, required: true, max: 100},
     libelle: {type: String, required: true, max:100},
     mqttId: {type: String, required: true, max: 100}
   }

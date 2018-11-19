@@ -1,7 +1,11 @@
 <script>  
     var socket = io.connect('http://localhost:3002');
-    socket.on('messages', function(data) {
-        $("#message").html(data);
+    socket.on('{{{identifiantConnexion}}}', function(data) {
+        let test = JSON.parse(data);
+        console.log(test);
+        for(let i in test['datas']){
+          $('#li-'+i).html(test['datas'][i]);
+        }
     });
 </script>
 <div>   
@@ -10,12 +14,16 @@
         <h3 class="uk-card-title">{{libelleObjet}}</h3>
         <div >
             <p id="message">{{typeObjetLabel}} <br/> Identifiant de connexion : {{identifiantConnexion}}</p>
-            <ul uk-tab>
+            <ul uk-tab='connect: #ul-{{{identifiantConnexion}}}'>
                 {{#each datas}}
                     <li class="uk"><a class="uk-tab-root-link" href="">{{libelle}}</a></li>
                 {{/each}}
+            </ul>
+            <ul class="uk-switcher uk-margin" id="ul-{{{identifiantConnexion}}}">
+                {{#each datas}}
+                    <li id="li-{{{abreviation}}}"></li>
+                {{/each}}
             </ul>     
-            <p class="uk-text-success">17°C</p>
         </div>
     </div> 
 </div>

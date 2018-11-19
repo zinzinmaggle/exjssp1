@@ -1,0 +1,7 @@
+Créer un bel objet js pour la vue des cards comme ça pas besoin de faire un script js dans la vue
+Créer un code objet à partir du reférentiel
+Créer le statut de l'objet connecté
+Initialiser toutes les connexions mqtt au lancement du serveur
+
+Faire de l'asynchrone
+
