@@ -4,11 +4,11 @@ var Schema = mongoose.Schema;
 
 var MqttSchema = new Schema(
   {
-    statutCd: {type: String, required: true, max: 100},
     lastDataReceived: {type: Object, required: false},
     lastDataReceivedTime: {type: Date, required: false},
     topic: {type: String, required: true},
     broker: {type: String, required: true},
+    intervalId: {type: Object, required : false }
   }
 );
 

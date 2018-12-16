@@ -20,10 +20,13 @@ var hbs = exphbs.create({
 app.engine('handlebars',hbs.engine);
 app.set('view engine', 'handlebars');
 
+
 app.io = io.listen(app.listen(3002));
 
+app.memoryStack = [];
 
 module.exports = {
-    app,
-    io : app.io
+    app: app,
+    io : app.io,
+    memoryStack : app.memoryStack
 }

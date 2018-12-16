@@ -27,4 +27,5 @@ const TypesObjet = {
         commandStructure: {}
     }
 }
+Object.freeze(TypesObjet);
 module.exports = TypesObjet;

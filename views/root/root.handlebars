@@ -1,11 +1,12 @@
 <div id="vertical-center-align">
     <div class="uk-grid-small uk-child-width-1-4@s uk-flex-center uk-text-center" uk-grid>
-         {{#each Objets}}
-             {{> card/card}}
+         {{#each ListeObjets.Objets}}
+             {{> card/card }}
          {{/each}}
     </div>
    
     <div class="uk-container uk-container-expand">
-        {{> popin/popin TypesObjet}}
+        {{> popin/popin ListeTypesObjet}}
     </div>
+     {{> pageover/pageover ListeObjets}}
 </div>

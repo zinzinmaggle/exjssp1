@@ -1,0 +1,30 @@
+  <!-- This is the off-canvas -->
+<div id="my-id" uk-offcanvas>
+    <div class="uk-offcanvas-bar">
+        <button class="uk-offcanvas-close" type="button" uk-close></button>
+            <form method="POST" action="/supprimer">
+                <fieldset class="uk-fieldset">
+                    <legend class="uk-legend">Supprimer un objet</legend>
+                    <table class="uk-table uk-table-responsive uk-table-divider">
+                        <thead>
+                             <tr>
+                                <td>Libellé</td>
+                                <td>#</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each Objets}}
+                            <tr>
+                                <th>{{libelle}}</th>
+                                <th><input name="code" value="{{code}}${{mqttId}}" class="uk-checkbox" type="checkbox"></th>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    <p uk-margin>
+                        <input type="submit" class="uk-button uk-button-default" value="Supprimer"/>
+                    </p>
+                </fieldset>
+            </form>
+    </div>
+</div>

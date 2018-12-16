@@ -10,5 +10,5 @@ const Referentiels = {
         typeObjetCd: "ARR"
     }
 }
-// Corriger le modèle pour que l'objet comporte le type d'objet et non le referentiel
+Object.freeze(Referentiels);
 module.exports = Referentiels;

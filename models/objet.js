@@ -6,7 +6,8 @@ var ObjetSchema = new Schema(
   {
     typeObjetCd: {type: String, required: true, max: 100},
     libelle: {type: String, required: true, max:100},
-    mqttId: {type: String, required: true, max: 100}
+    mqttId: {type: String, required: true, max: 100},
+    code :{type : String, required: true, max :100}
   }
 );
 

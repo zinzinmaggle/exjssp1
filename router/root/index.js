@@ -6,5 +6,10 @@ app.get('/', function (req, res) {
 });
 
 app.post('/ajouter', function (req, res) {
-    RootController.ajouterAction(res,req)
+    RootController.ajouterAction(req,res)
 });
+
+app.post('/supprimer', function (req,res){
+    RootController.supprimerAction(req,res)
+});
+

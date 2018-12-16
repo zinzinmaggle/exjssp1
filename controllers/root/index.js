@@ -9,8 +9,13 @@ class RootController {
         return instance;
     }
 
-    ajouterAction(res,req){
+    ajouterAction(req,res){
         RootServices.saveAjouterAction(req.body);
+        res.redirect('/');
+    }
+
+    supprimerAction(req,res){
+        RootServices.deleteSupprimerAction(req.body);
         res.redirect('/');
     }
 
@@ -20,6 +25,8 @@ class RootController {
 }
 
 const _root_controller = new RootController("Home");
+
+Object.freeze(_root_controller);
 module.exports = { 
     RootController : _root_controller
 }

@@ -4,10 +4,12 @@ class SocketConnexion {
        this.mqttId = mqttId;
        this.message = message;
     }
+    
 
     emit(){
         return io.emit(''+this.mqttId+'', this.message.toLocaleString());
     }
+
 }
 
 module.exports = SocketConnexion;
