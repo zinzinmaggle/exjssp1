@@ -23,10 +23,10 @@ app.set('view engine', 'handlebars');
 
 app.io = io.listen(app.listen(3002));
 
-app.memoryStack = [];
+app.intervalStack = [];
 
 module.exports = {
     app: app,
     io : app.io,
-    memoryStack : app.memoryStack
+    intervalStack : app.intervalStack
 }

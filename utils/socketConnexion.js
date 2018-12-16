@@ -1,15 +1,20 @@
 import {io} from '../server.js'
+
+let instance = null;
 class SocketConnexion {
     constructor(mqttId, message){
-       this.mqttId = mqttId;
-       this.message = message;
-    }
-    
+        if(instance){
+            return instance;
+        }
 
-    emit(){
-        return io.emit(''+this.mqttId+'', this.message.toLocaleString());
+        instance = this;
+    }
+
+    emit(destination,message){
+        return io.emit(''+destination+'', message.toLocaleString());
     }
 
 }
-
-module.exports = SocketConnexion;
+let _socketC = new SocketConnexion();
+Object.freeze(_socketC);
+module.exports = _socketC;

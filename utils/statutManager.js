@@ -1,5 +1,4 @@
 import MqttConnexion from './mqttConnexion.js'
-import {memoryStack} from '../server.js'
 
 class StatutManager {
     constructor(mqtt, suffixe){

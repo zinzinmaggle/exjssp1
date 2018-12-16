@@ -1,3 +1,2 @@
-Supprimer un objet
 Retour des formulaires
 Logger temps réel

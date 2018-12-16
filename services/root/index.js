@@ -5,7 +5,8 @@ import TypesObjet  from '../../enums/typesObjet.js'
 import Referentiels  from '../../enums/referentiels.js'
 import StatutManager from '../../utils/statutManager.js'
 import { find } from 'lodash';
-import MemoryStack from '../../server.js'
+import IntervalStack from '../../utils/intervalStack.js';
+
 const _root_services = {
     getRoot:function(){
         let retour = {'ListeObjets':{'Objets':[]}};
@@ -29,15 +30,10 @@ const _root_services = {
             'topic' : object.mqttId,
             'broker' : '127.0.0.1'
         }
+
         Mqtt.create(mqtt);
         new MqttConnexion(mqtt).listen();
-
-        MemoryStack.push(new StatutManager(mqtt,true).getIntervalId(),object.code,true);
-        // let test = mqtt['topic']+'-statut-channel';
-        // let obj = {};
-        // obj[test] = new StatutManager(mqtt,true);  
-        // memoryStack.push(obj);
-        // Mqtt.create( obj[test].getMqtt());
+        IntervalStack.push(new StatutManager(mqtt,true).getIntervalId(),object.code);
     },
     deleteSupprimerAction:function(object){
         var _o;
@@ -54,12 +50,7 @@ const _root_services = {
             Objet.deleteOne({code: t[0] }, function (err) {
                 if (err) return handleError(err);
             });
-            // for(let j in memoryStack){          
-            //     if(memoryStack[j].hasOwnProperty(m)) {
-            //        clearInterval(memoryStack[j][m].intervalId);
-            //        memoryStack.splice(j, 1);
-            //     }
-            // }
+            IntervalStack.pop(t[0]);
             Mqtt.deleteOne({topic: t[1]}, function (err) {
                 if (err) return handleError(err);
             });

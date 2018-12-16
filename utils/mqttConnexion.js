@@ -22,7 +22,7 @@ class MqttConnexion {
         const re = /^.+(-statut-channel)$/g;
         this.client.on('message', function (topic, message) {
             if(topic.match(re) == null){
-                new SocketConnexion(topic, message).emit();
+                SocketConnexion.emit(topic, message);
             }else{
                 stack.push(message.toLocaleString());
                 let t = '';
@@ -35,7 +35,7 @@ class MqttConnexion {
                         t = "{\"badge\":\"ONLINE\", \"message\":\"Transmission des données...\"}";
                     }
                     stack = [];
-                    new SocketConnexion(topic, t).emit();
+                    SocketConnexion.emit(topic, t);
                 }
             }
         });
@@ -44,11 +44,11 @@ class MqttConnexion {
         let topic = this.mqttDatas.topic;
         var _verification_connexion_mqtt = !this.client.connected  || this.client.reconnecting;
         if(_verification_connexion_mqtt){
-            new SocketConnexion(topic, "{\"badge\":\"WARNING\", \"message\":\"L\'application ne parvient pas à se connecter au broker MQTT\"}").emit();
+            SocketConnexion.emit(topic, "{\"badge\":\"WARNING\", \"message\":\"L\'application ne parvient pas à se connecter au broker MQTT\"}");
         }
         this.client.publish(topic, message, function(err){
             if(err){
-                new SocketConnexion(topic, "{\"badge\":\"WARNING\", \"message\":\"Une erreur est survenue lors de la publication. Veuillez vérifier que le broker MQTT est en ligne.\"}").emit();
+                SocketConnexion.emit(topic, "{\"badge\":\"WARNING\", \"message\":\"Une erreur est survenue lors de la publication. Veuillez vérifier que le broker MQTT est en ligne.\"}");
             }
             console.log("published " + message +" on topic : " + topic + " at " + new Date());
         });
