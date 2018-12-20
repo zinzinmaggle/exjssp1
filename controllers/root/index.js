@@ -10,7 +10,15 @@ class RootController {
     }
 
     ajouterAction(req,res){
-        RootServices.saveAjouterAction(req.body);
+        let _t = RootServices.saveAjouterAction(req.body);
+        if(typeof _t != Object && _t){
+            res.redirect('/');
+        }else{
+            res.send(_t);
+        }
+    }
+
+    retourAjouterAction(req,res){
         res.redirect('/');
     }
 
@@ -19,8 +27,9 @@ class RootController {
         res.redirect('/');
     }
 
-    render(res){
-        res.render('root/root', RootServices.getRoot());
+    getRoot(res,errors){
+        let _rs = RootServices.getRoot();
+        res.render('root/root', _rs);
     }
 }
 

@@ -23,17 +23,19 @@ const _root_services = {
         let _r = find(TypesObjet, function(o) { return o.code === object.typeObjetCd});
         let _f = find(Referentiels, function(o) { return o.typeObjetCd === _r['code']});
         object['code'] = (_f['code']+object.libelle).toUpperCase();
-        Objet.create(object);
-    
-        let mqtt = {
-            'statutCd' : 'NC',
-            'topic' : object.mqttId,
-            'broker' : '127.0.0.1'
-        }
+        let _o = new Objet(object);
 
-        Mqtt.create(mqtt);
-        new MqttConnexion(mqtt).listen();
-        IntervalStack.push(new StatutManager(mqtt,true).getIntervalId(),object.code);
+        Objet.create(_o);
+        let _m = new Mqtt({
+            'topic' : _o.mqttId,
+            'broker' : '127.0.0.1'
+        });
+
+        Mqtt.create(_m);
+        new MqttConnexion(_m).listen();
+        IntervalStack.push(new StatutManager(_m,true).getIntervalId(),_o.code);
+
+        return true;
     },
     deleteSupprimerAction:function(object){
         var _o;

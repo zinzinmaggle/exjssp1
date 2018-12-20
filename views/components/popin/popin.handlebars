@@ -1,21 +1,53 @@
+<script>
+$( document ).ready(function() {
+    $("#ajouterObjetForm").submit(function(event) {
+		event.preventDefault();
+		ajaxPost();
+	});
+    function ajaxPost(){
+    	var formData = {
+    		typeObjetCd : $("#typeObjetCd").val(),
+    		mqttId :  $("#mqttId").val(),
+            libelle : $("#libelle").val()
+    	};	
+    	$.ajax({
+			type : "POST",
+			contentType : "application/json",
+			url : window.location + "ajouter",
+			data : JSON.stringify(formData),
+			dataType : 'json',
+			success : function(objet) {
+                console.log(objet);
+                for(let k in objet){
+                    $("#"+objet[k].param).addClass('uk-form-danger');
+                    $("#"+objet[k].param).attr('uk-tooltip','title: '+objet[k].msg+'; pos: right');
+                }
+			},
+			error : function(e) {
+				alert("Error!")
+				console.log("ERROR: ", e);
+			}
+		}); 
+    }
+});
+</script>
 <div id="modal-center" class="uk-flex-top" uk-modal>
     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
         <div class="uk-modal-header">
             <h2 class="uk-modal-title">Ajouter un objet</h2>
         </div>
         <div class="uk-modal-body">
-            <form class="uk-form-horizontal uk-margin-large" method="POST" action="/ajouter">
+            <form id="ajouterObjetForm" class="uk-form-horizontal uk-margin-large">
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="form-horizontal-text">Libellé</label>
+                    <label class="uk-form-label" for="libelle">Libellé</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" name="libelle" id="form-horizontal-text" type="text" placeholder="Some text...">
+                        <input class="uk-input" name="libelle" id="libelle" type="text">
                     </div>
                 </div>
-
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="form-horizontal-select">Type d'objet</label>
+                    <label class="uk-form-label" for="typeObjetCd">Type d'objet</label>
                     <div class="uk-form-controls">
-                        <select class="uk-select" name="typeObjetCd" id="form-horizontal-select">
+                        <select class="uk-select" name="typeObjetCd" id="typeObjetCd">
                             {{#each TypesObjet}}
                              <option value="{{code}}">{{libelle}}</option>
                              {{/each}}
@@ -24,9 +56,9 @@
                 </div>
 
                 <div class="uk-margin">
-                    <label class="uk-form-label" for="form-horizontal-text">Identifiant de connexion</label>
+                    <label class="uk-form-label" for="mqttId">Identifiant de connexion</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" name="mqttId" id="form-horizontal-text" type="text" placeholder="AAA-AAA">
+                        <input class="uk-input" name="mqttId" id="mqttId" type="text">
                     </div>
                 </div>
                 <div class="uk-modal-footer uk-text-right">

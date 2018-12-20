@@ -22,10 +22,8 @@ class IntervalStack {
 
     push(object,code){
         let o = {};
-        o['code'] = code;
-        if(isInterval){
-            o['interval'] = object;
-        }
+        o['code'] = code;     
+        o['interval'] = object;
         if(!this.check(code)){
             intervalStack.push(o);
             return true;

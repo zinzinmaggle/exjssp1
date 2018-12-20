@@ -4,10 +4,32 @@ var Schema = mongoose.Schema;
 
 var ObjetSchema = new Schema(
   {
-    typeObjetCd: {type: String, required: true, max: 100},
-    libelle: {type: String, required: true, max:100},
-    mqttId: {type: String, required: true, max: 100},
-    code :{type : String, required: true, max :100}
+    typeObjetCd: {
+      type: String, 
+      required: true, 
+      max: 100,
+    },
+    libelle: {
+      type: String, 
+      required: [true,'Le libelle est requis.'], 
+      max:[15,'La longeur maximum du libellé ne doit pas dépasser 15 caractères.']
+    },
+    mqttId: {
+      type: String,
+      max: 7,
+      validate: {
+        validator: function(v) {
+          return /^[A-Z]{3}-[A-Z]{3}$/.test(v);
+        },
+        message: props => `${props.value} n'est pas un identifiant de connexion valide !`
+      },
+      required: [true, 'L\'identifiant de connexion est requis.']
+      },
+    code :{
+      type : String, 
+      required: true, 
+      max :100,
+    }
   }
 );
 
