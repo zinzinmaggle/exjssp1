@@ -24,18 +24,14 @@ const _root_services = {
         let _f = find(Referentiels, function(o) { return o.typeObjetCd === _r['code']});
         object['code'] = (_f['code']+object.libelle).toUpperCase();
         let _o = new Objet(object);
-
         Objet.create(_o);
         let _m = new Mqtt({
             'topic' : _o.mqttId,
             'broker' : '127.0.0.1'
         });
-
         Mqtt.create(_m);
         new MqttConnexion(_m).listen();
         IntervalStack.push(new StatutManager(_m,true).getIntervalId(),_o.code);
-
-        return true;
     },
     deleteSupprimerAction:function(object){
         var _o;

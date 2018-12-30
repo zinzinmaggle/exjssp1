@@ -17,15 +17,14 @@ $( document ).ready(function() {
 			data : JSON.stringify(formData),
 			dataType : 'json',
 			success : function(objet) {
-                console.log(objet);
-                for(let k in objet){
-                    $("#"+objet[k].param).addClass('uk-form-danger');
-                    $("#"+objet[k].param).attr('uk-tooltip','title: '+objet[k].msg+'; pos: right');
-                }
+                window.location.replace("http://localhost:3002/");
 			},
 			error : function(e) {
-				alert("Error!")
-				console.log("ERROR: ", e);
+                let errors = e.responseJSON.errors;
+				for(let k in errors){
+                    $("#"+errors[k].param).addClass('uk-form-danger');
+                    $("#"+errors[k].param).attr('uk-tooltip','title: '+errors[k].msg+'; pos: right');
+                }
 			}
 		}); 
     }
@@ -48,6 +47,7 @@ $( document ).ready(function() {
                     <label class="uk-form-label" for="typeObjetCd">Type d'objet</label>
                     <div class="uk-form-controls">
                         <select class="uk-select" name="typeObjetCd" id="typeObjetCd">
+                            <option value="" disabled selected>Select your option</option>
                             {{#each TypesObjet}}
                              <option value="{{code}}">{{libelle}}</option>
                              {{/each}}
