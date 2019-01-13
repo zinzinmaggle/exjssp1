@@ -20,11 +20,14 @@ const TypesObjet = {
                 icon: "",
                 libelle : "Température ressentie",
                 abreviation : "tr"
-            }
+            },
         ],
-        dataStructure: {t:'',h:'',tr:''},
-        actions: {},
-        commandStructure: {}
+        commands: [
+            {
+                libelle: "Arrêter",
+                command : "1100000"
+            }
+        ]
     }
 }
 Object.freeze(TypesObjet);

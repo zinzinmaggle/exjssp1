@@ -1,40 +1,50 @@
 import Objet  from '../../models/objet.js'
 import Mqtt  from '../../models/mqtt.js'
-import MqttConnexion from '../../utils/mqttConnexion.js'
+
+import {MqttConnexion} from '../../utils/mqttConnexion.js'
+import StatutManager from '../../utils/statutManager.js'
+import IntervalStack from '../../utils/intervalStack.js';
+
 import TypesObjet  from '../../enums/typesObjet.js'
 import Referentiels  from '../../enums/referentiels.js'
-import StatutManager from '../../utils/statutManager.js'
+
 import { find } from 'lodash';
-import IntervalStack from '../../utils/intervalStack.js';
+
 
 const _root_services = {
     getRoot:function(){
         let retour = {'ListeObjets':{'Objets':[]}};
         Objet.find({}, function (err, docs) {
                 (docs).forEach(element => {
-                    element['display'] =  find(TypesObjet, function(o) { return o.code === element.typeObjetCd})['details'];           
+                    element['display'] =  find(TypesObjet, function(o) { return o.code === element.typeObjetCd})['details'];      
+                    element['commands'] =  find(TypesObjet, function(o) { return o.code === element.typeObjetCd})['commands'];           
                     retour['ListeObjets']['Objets'].push(element); 
                 });
         });
         retour['ListeTypesObjet'] = {TypesObjet};
         return retour;
     },
-    saveAjouterAction:function(object){
+    ajouterAction:function(object){
         let _r = find(TypesObjet, function(o) { return o.code === object.typeObjetCd});
         let _f = find(Referentiels, function(o) { return o.typeObjetCd === _r['code']});
         object['code'] = (_f['code']+object.libelle).toUpperCase();
         let _o = new Objet(object);
-        Objet.create(_o);
-        let _m = new Mqtt({
-            'topic' : _o.mqttId,
-            'broker' : '127.0.0.1'
+        Objet.create(_o).then(t =>{
+            let _m = new Mqtt({
+                'topic' : t.mqttId,
+            });
+            Mqtt.create(_m).then(o => {
+                // Enregister cet interval dans la stack avec les autres interval de cet objet
+                setInterval(function(){
+                    MqttConnexion.setTopic(t.mqttId);
+                    MqttConnexion.subscribe();
+                },1000)
+                IntervalStack.push(new StatutManager(o,true).getIntervalId(),t.code);
+            });
         });
-        Mqtt.create(_m);
-        new MqttConnexion(_m).listen();
-        IntervalStack.push(new StatutManager(_m,true).getIntervalId(),_o.code);
     },
-    deleteSupprimerAction:function(object){
-        var _o;
+    supprimerAction:function(object){
+        let _o;
         if(typeof object.code !== "object"){
             _o = [object];
         } else {
@@ -43,6 +53,9 @@ const _root_services = {
                 _o.push({code : object.code[i]}); 
             }      
         }
+        // _o.forEach((e)=>{
+        //     console.log(e);
+        // })
         for(let k in _o){
             let t = _o[k].code.split('$');
             Objet.deleteOne({code: t[0] }, function (err) {
@@ -53,6 +66,11 @@ const _root_services = {
                 if (err) return handleError(err);
             });
         }
+    },
+    envoyerCommandeAction:function(object){
+        MqttConnexion.setTopic(object.mqttId+"-command");
+        MqttConnexion.subscribe();
+        MqttConnexion.publish(object.command,true);
     }
 };
 Object.freeze(_root_services);

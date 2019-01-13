@@ -10,7 +10,7 @@ class RootController {
     }
 
     ajouterAction(req,res){
-        RootServices.saveAjouterAction(req.body);
+        RootServices.ajouterAction(req.body);
         return res.status(200).json(req.body);
     }
 
@@ -19,10 +19,15 @@ class RootController {
     }
 
     supprimerAction(req,res){
-        RootServices.deleteSupprimerAction(req.body);
+        RootServices.supprimerAction(req.body);
         res.redirect('/');
     }
 
+    envoyerCommande(req,res){
+        RootServices.envoyerCommandeAction(req.body);
+        return res.status(200).json(req.body);
+    }
+    
     getRoot(res){
         let _rs = RootServices.getRoot();
         res.render('root/root', _rs);

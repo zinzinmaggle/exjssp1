@@ -1,22 +1,19 @@
-import MqttConnexion from './mqttConnexion.js'
+import {MqttConnexion} from './mqttConnexion.js'
 
 class StatutManager {
     constructor(mqtt, suffixe){
         this.mqtt = mqtt;
         this.mqtt['topic'] = this.mqtt.topic + (suffixe ? '-statut-channel' : '');
-        this.mqttConnexion = null;
         this.intervalId = null;
-        this.init();
+        this.manage();
       
     }   
-    init(){
-        this.mqttConnexion = new MqttConnexion(this.mqtt);
-        this.mqttConnexion.listen();
-        this.manage(this.mqttConnexion);
-    }
-    manage(mqttConnexion){
+    manage(){
+        let topic = this.mqtt.topic
         this.intervalId = setInterval(function(){
-            mqttConnexion.publish("###");
+            MqttConnexion.setTopic(topic);
+            MqttConnexion.subscribe();
+            MqttConnexion.publish("###",false);
         }, 3000);
     }
 

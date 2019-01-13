@@ -16,6 +16,10 @@ app.post('/ajouter',_root_validator_ajouter_action, (req, res) => {
     RootController.ajouterAction(req,res);
 });
 
+app.post('/envoyerCommande', (req,res) => {
+    RootController.envoyerCommande(req,res);
+});
+
 app.post('/supprimer', (req,res) => {
     RootController.supprimerAction(req,res);
 });

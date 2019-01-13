@@ -15,6 +15,24 @@
         }
     });
 </script>
+<script>
+    $(document).ready(function(){
+        $(".command-button").click(function(e){
+            $(e.target).attr('disabled', '');
+            var formData = {
+                mqttId :  '{{{mqttId}}}',
+                command : $(e.target).attr("command")
+    	    };
+            $.ajax({
+                type : "POST",
+                contentType : "application/json",
+                url : window.location + "envoyerCommande",
+                data : JSON.stringify(formData),
+                dataType : 'json'
+		    }); 
+        });
+    });
+</script>
 <div>   
     <div class="uk-card uk-card-small uk-card-default uk-card-body uk-width-auto@m">
         <div class="uk-card-badge uk-label" id="badge-{{{mqttId}}}">QUERYING</div>
@@ -25,11 +43,17 @@
                 {{#each display}}
                     <li class="uk"><a class="uk-tab-root-link" href="">{{libelle}}</a></li>
                 {{/each}}
+                {{#if commands}}
+                    <li class="uk"><a class="uk-tab-root-link" href="">Commandes</a></li>
+                {{/if}}
             </ul>
             <ul class="uk-switcher uk-margin" id="ul-{{{code}}}">
                 {{#each display}}
                     <li id="li-{{{abreviation}}}"> <span> {{unity}}</span></li>
                 {{/each}}
+                {{#if commands}}
+                    <li> {{#each commands}} <button class="uk-button uk-button-danger command-button {{{disabled}}}" command="{{{command}}}">{{libelle}}</button> {{/each}}</li>
+                {{/if}}
             </ul>     
         </div>
     </div> 

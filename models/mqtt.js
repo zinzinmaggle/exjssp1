@@ -7,7 +7,6 @@ var MqttSchema = new Schema(
     lastDataReceived: {type: Object, required: false},
     lastDataReceivedTime: {type: Date, required: false},
     topic: {type: String, required: true},
-    broker: {type: String, required: true},
     intervalId: {type: Object, required : false }
   }
 );
