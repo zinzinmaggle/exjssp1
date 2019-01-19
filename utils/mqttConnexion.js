@@ -1,13 +1,8 @@
 import mqtt from 'mqtt'
 import SocketConnexion from './socketConnexion.js'
-let instance = null;
 
 class MqttConnexion {
     constructor(){
-        if(instance){
-            return instance;
-        }
-        instance = this;
 
         this.client = null;
         this.topic = null;
@@ -88,7 +83,5 @@ class MqttConnexion {
     }
      
 }
-let _t = new MqttConnexion();
-module.exports = {
-    MqttConnexion : _t
-}
+
+module.exports = MqttConnexion;

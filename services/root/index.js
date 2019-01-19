@@ -1,12 +1,13 @@
-import Objet  from '../../models/objet.js'
-import Mqtt  from '../../models/mqtt.js'
+import Objet  from '../../models/objet.js';
+import Mqtt  from '../../models/mqtt.js';
 
-import {MqttConnexion} from '../../utils/mqttConnexion.js'
-import StatutManager from '../../utils/statutManager.js'
+// import {MqttConnexion} from '../../utils/mqttConnexion.js'
+// import StatutManager from '../../utils/statutManager.js'
 import IntervalStack from '../../utils/intervalStack.js';
-
-import TypesObjet  from '../../enums/typesObjet.js'
-import Referentiels  from '../../enums/referentiels.js'
+import DataCommunication from '../../utils/communication/dataCommunication.js';
+import PingCommunication from '../../utils/communication/pingCommunication.js';
+import TypesObjet  from '../../enums/typesObjet.js';
+import Referentiels  from '../../enums/referentiels.js';
 
 import { find } from 'lodash';
 
@@ -34,12 +35,15 @@ const _root_services = {
                 'topic' : t.mqttId,
             });
             Mqtt.create(_m).then(o => {
-                // Enregister cet interval dans la stack avec les autres interval de cet objet
-                setInterval(function(){
-                    MqttConnexion.setTopic(t.mqttId);
-                    MqttConnexion.subscribe();
-                },1000)
-                IntervalStack.push(new StatutManager(o,true).getIntervalId(),t.code);
+                let _d = new DataCommunication("MQTT",t.mqttId,null);
+                _d.subscribe();
+                _d.listen();
+                // setInterval(function(){
+                //     MqttConnexion.setTopic(t.mqttId);
+                //     MqttConnexion.subscribe();
+                // },1000)
+                IntervalStack.push(new PingCommunication("MQTT",t.mqttId+'-statut-channel',"###").getIntervalId(),t.code);
+                //IntervalStack.push(new StatutManager(o,true).getIntervalId(),t.code);
             });
         });
     },
@@ -68,9 +72,12 @@ const _root_services = {
         }
     },
     envoyerCommandeAction:function(object){
-        MqttConnexion.setTopic(object.mqttId+"-command");
-        MqttConnexion.subscribe();
-        MqttConnexion.publish(object.command,true);
+        let _d =  new DataCommunication("MQTT",object.mqttId+"-command",object.command);
+       _d.subscribe();
+       _d.listen();
+        // MqttConnexion.setTopic(object.mqttId+"-command");
+        // MqttConnexion.subscribe();
+        // MqttConnexion.publish(object.command,true);
     }
 };
 Object.freeze(_root_services);
