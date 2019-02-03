@@ -25,7 +25,9 @@ const TypesObjet = {
         commands: [
             {
                 libelle: "Arrêter",
-                command : "1100000"
+                command : "1100000",
+                executeOnKeyPress: false,
+                disableAfterPress : true
             }
         ]
     }

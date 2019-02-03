@@ -1,22 +1,39 @@
-
+import Communications from '../../enums/communications.js'
+import { mqtt } from '../../server.js'
 
 class Communication {
-    constructor(type){
+    constructor(type,topic,message){
         this.type = type;
+        this.topic = topic;
+        this.message = message;
     }
 
-   
+    checkClient(){
+        return !mqtt.connected  || mqtt.reconnecting;
+    }
 
     subscribe(){
-        console.log("Running subscribe from super.")
+        mqtt.subscribe(this.topic);    
     }
 
-    listen(){
-        throw new Error('You have to implement the method listen !');
+    listen(executeListen){
+        let _executeListen = executeListen;
+        mqtt.on('message',  (topic, message) => {
+            _executeListen(topic, message);
+        });
     }
 
-    publish(){
-        throw new Error('You have to implement the method publish !');
+    publish(executePublish,type){
+        let _executePublish = executePublish;
+        let _topic = this.topic;
+        let _message = this.message;
+        if(type === Communications.IO.communication){
+                _executePublish(_topic,_message);
+        }else {
+            mqtt.publish(_topic, _message, function(err){
+                _executePublish(_topic,_message);
+            });
+        }
     }
 }
 

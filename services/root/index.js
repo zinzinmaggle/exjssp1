@@ -1,14 +1,13 @@
 import Objet  from '../../models/objet.js';
 import Mqtt  from '../../models/mqtt.js';
+import Command  from '../../models/command.js';
 
-// import {MqttConnexion} from '../../utils/mqttConnexion.js'
-// import StatutManager from '../../utils/statutManager.js'
 import IntervalStack from '../../utils/intervalStack.js';
 import DataCommunication from '../../utils/communication/dataCommunication.js';
 import PingCommunication from '../../utils/communication/pingCommunication.js';
 import TypesObjet  from '../../enums/typesObjet.js';
 import Referentiels  from '../../enums/referentiels.js';
-
+import BinaryMessages from '../../enums/binaryMessages.js'
 import { find } from 'lodash';
 
 
@@ -18,7 +17,15 @@ const _root_services = {
         Objet.find({}, function (err, docs) {
                 (docs).forEach(element => {
                     element['display'] =  find(TypesObjet, function(o) { return o.code === element.typeObjetCd})['details'];      
-                    element['commands'] =  find(TypesObjet, function(o) { return o.code === element.typeObjetCd})['commands'];           
+                    element['commands'] =  find(TypesObjet, function(o) { return o.code === element.typeObjetCd})['commands'];
+                    element['commands'].forEach((c) => {
+                        c['disabled'] = false;
+                        Command.findOne({mqttId : element.mqttId, statut : "PEN", command : c.command}).sort({date: -1}).exec(function(err, docs) { 
+                            if(docs){
+                                c['disabled'] = true;
+                            }
+                        });
+                    });   
                     retour['ListeObjets']['Objets'].push(element); 
                 });
         });
@@ -38,17 +45,17 @@ const _root_services = {
                 let _d = new DataCommunication("MQTT",t.mqttId,null);
                 _d.subscribe();
                 _d.listen();
-                // setInterval(function(){
-                //     MqttConnexion.setTopic(t.mqttId);
-                //     MqttConnexion.subscribe();
-                // },1000)
-                IntervalStack.push(new PingCommunication("MQTT",t.mqttId+'-statut-channel',"###").getIntervalId(),t.code);
-                //IntervalStack.push(new StatutManager(o,true).getIntervalId(),t.code);
+
+                IntervalStack.push(new PingCommunication("MQTT",t.mqttId, BinaryMessages.ping).getIntervalId(),t.code);
+               // IntervalStack.push(new PingCommunication("MQTT",t.mqttId,"###").getIntervalId(),t.code);
             });
         });
     },
     supprimerAction:function(object){
         let _o;
+        // TODO : Sanitize l'objet avec express validators
+        // Entrée : "" || {code: {'', '',''}}
+        // Sortie 
         if(typeof object.code !== "object"){
             _o = [object];
         } else {
@@ -57,9 +64,10 @@ const _root_services = {
                 _o.push({code : object.code[i]}); 
             }      
         }
+        // TODO : Remplacer par
         // _o.forEach((e)=>{
-        //     console.log(e);
-        // })
+
+        // });
         for(let k in _o){
             let t = _o[k].code.split('$');
             Objet.deleteOne({code: t[0] }, function (err) {
@@ -72,14 +80,17 @@ const _root_services = {
         }
     },
     envoyerCommandeAction:function(object){
-        let _d =  new DataCommunication("MQTT",object.mqttId+"-command",object.command);
+        let _d =  new DataCommunication("MQTT",object.mqttId,BinaryMessages.command + object.command);
        _d.subscribe();
+       _d.publish();
        _d.listen();
-        // MqttConnexion.setTopic(object.mqttId+"-command");
-        // MqttConnexion.subscribe();
-        // MqttConnexion.publish(object.command,true);
+
+       let command = new Command();
+       command.setDate(new Date());
+      // command.set
     }
 };
+
 Object.freeze(_root_services);
 module.exports = {
     RootServices: _root_services

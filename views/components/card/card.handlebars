@@ -1,27 +1,30 @@
 <script>  
    var socket = io.connect('http://localhost:3002');
-   socket.on('{{{mqttId}}}-statut-channel', function(datas) {
-            let t = JSON.parse(datas);
-            $("#badge-{{{mqttId}}}").text(t['badge']);
-            $("#message-{{{mqttId}}}").text(t['message']);
-    });
     socket.on('{{{mqttId}}}', function(datas) {
         let parsedDatas = JSON.parse(datas);
-        for(let j in parsedDatas['datas']){
+        if(parsedDatas.hasOwnProperty('badge')){
+             $("#badge-{{{mqttId}}}").text(parsedDatas['badge']);
+             $("#message-{{{mqttId}}}").text(parsedDatas['message']);
+        }else{
+            for(let j in parsedDatas['datas']){
           $('#li-'+j).text(function(i,oldtext){
                 return parsedDatas['datas'][j] +' ' + oldtext.replace(/^.+\s/gi, '');
           });
           $("#badge-{{{mqttId}}}").attr('uk-tooltip','title:Dernières données reçues le : '+new Date()+'; pos: right');
         }
+    }    
     });
 </script>
 <script>
     $(document).ready(function(){
         $(".command-button").click(function(e){
-            $(e.target).attr('disabled', '');
+            let _e = $(e.target); 
+            if(_e.attr('disableAfterPress') === "true"){
+                 _e.attr('disabled', '');
+            }
             var formData = {
                 mqttId :  '{{{mqttId}}}',
-                command : $(e.target).attr("command")
+                command : _e.attr("command")
     	    };
             $.ajax({
                 type : "POST",
@@ -52,7 +55,7 @@
                     <li id="li-{{{abreviation}}}"> <span> {{unity}}</span></li>
                 {{/each}}
                 {{#if commands}}
-                    <li> {{#each commands}} <button class="uk-button uk-button-danger command-button {{{disabled}}}" command="{{{command}}}">{{libelle}}</button> {{/each}}</li>
+                    <li> {{#each commands}} <button class="uk-button uk-button-danger command-button" disableAfterPress="{{{disableAfterPress}}}" command="{{{command}}}" {{{disabled}}}>{{libelle}}</button> {{/each}}</li>
                 {{/if}}
             </ul>     
         </div>
