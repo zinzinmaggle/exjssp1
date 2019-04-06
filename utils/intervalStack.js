@@ -12,11 +12,11 @@ class IntervalStack {
     }
 
     check(code){
-        for(let k in intervalStack){
-           if(intervalStack[k].code === code){
-               return true;
-           }
-        }
+        intervalStack.forEach(element => {
+            if(element.code === code){
+                return true;
+            }
+        });
         return false;
     }
 
@@ -37,12 +37,12 @@ class IntervalStack {
     }
 
     pop(code){
-        for(let k in intervalStack){
-            if(intervalStack[k].code === code){
+        intervalStack.forEach((element, index) => {
+            if(element.code === code){
                 clearInterval(this.access(code)['interval']);
-                intervalStack.splice(k, 1);
+                intervalStack.splice(index, 1);
             }
-        }
+        });
     }
 
 }

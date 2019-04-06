@@ -1,3 +1,10 @@
+Commande ON/OFF de l'objet
+//
+
 Commande de l'objet
 Logger temps réel dans pageOver
+Ordre d'import
+Script js dans fichier
 
+TODO dans le code
+Renommer les classes / fonctions / variables

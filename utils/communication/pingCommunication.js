@@ -3,6 +3,7 @@ import FrontOfficeCommunication from './frontOfficeCommunication.js';
 import BinaryMessages from '../../enums/binaryMessages.js'
 import Communications from '../../enums/communications.js'
 import Badges from '../../enums/badges.js'
+import { mqtt } from '../../server.js'
 
 class PingCommunication extends Communication {
     constructor(type,topic, message) {
@@ -41,23 +42,24 @@ class PingCommunication extends Communication {
         }
     }
     publish(){
-        if(super.checkClient()){
-            this.displayWarning();
-        }else{
-            super.publish(this.executePublish(), this.type);
+        return () => {
+            if(super.checkClient()){
+                this.displayWarning();
+            }else{
+                super.publish(this.executePublish());
+            }
         }
     }
     executePublish(){
         return (topic,message) => {
-                console.log("published ping : " + message.toLocaleString() +", on topic : " + topic + " at " + new Date());
+            mqtt.publish(topic, message);
+            console.log("published ping : " + message.toLocaleString() +", on topic : " + topic + " at " + new Date());
         }      
     }
     initPing(){
-        let _t = this;
-        this.intervalId = setInterval(function(){
-            _t.publish();
-        }, 3000);
+        this.intervalId = setInterval(this.publish(), 3000);
     }
+    
 
     getIntervalId(){
         return this.intervalId;

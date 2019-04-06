@@ -6,7 +6,7 @@ class FrontOfficeCommunication extends Communication {
         super(type,topic,message);
     }
     publish(){
-        super.publish(this.executePublish(), this.type);
+        super.publish(this.executePublish());
     }
     executePublish(){
         return (topic,message) => {

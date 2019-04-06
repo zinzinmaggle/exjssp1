@@ -42,7 +42,7 @@
         <h3 class="uk-card-title" id="title-card">&laquo; {{libelle}} &raquo; <p id="message">(#{{code}})</p></h3>
         <p id="message-{{{mqttId}}}" class="statut-message" style="text-style:italic;font-size:8px;">En attente d'informations ...</p>
         <div >
-            <ul uk-tab='connect: #ul-{{{code}}}'>
+            <ul class="uk-flex-center" uk-tab='connect: #ul-{{{code}}}'>
                 {{#each display}}
                     <li class="uk"><a class="uk-tab-root-link" href="">{{libelle}}</a></li>
                 {{/each}}

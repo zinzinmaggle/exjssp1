@@ -19,7 +19,7 @@ class RootController {
     }
 
     supprimerAction(req,res){
-        RootServices.supprimerAction(req.body);
+        RootServices.supprimerAction(req.body.code);
         res.redirect('/');
     }
 
